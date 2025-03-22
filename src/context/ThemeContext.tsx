@@ -11,13 +11,17 @@ export const ThemeProvider: React.FC<{
   children
 }) => {
   const [theme, setTheme] = useState<Theme>(() => {
-    const savedTheme = localStorage.getItem('theme');
+    const savedTheme = window.localStorage.getItem('theme');
     return savedTheme as Theme || 'light';
   });
   useEffect(() => {
+    const root = window.document.documentElement;
+    if (theme === 'dark') {
+      root.classList.add('dark');
+    } else {
+      root.classList.remove('dark');
+    }
     localStorage.setItem('theme', theme);
-    document.documentElement.classList.remove('light', 'dark');
-    document.documentElement.classList.add(theme);
   }, [theme]);
   const toggleTheme = () => {
     setTheme(prevTheme => prevTheme === 'light' ? 'dark' : 'light');
